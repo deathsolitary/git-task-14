@@ -1,0 +1,82 @@
+SSH
+
+sudo apt update && sudo apt upgrade
+sudo apt install openssh-server
+sudo systemctl enable --now ssh
+sudo systemctl status ssh
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.initial
+sudo nano /etc/ssh/sshd_config
+PubkeyAuthentification yes
+PermitRootLogin no
+PermitEmptyPasswords no
+sudo systemctl restart ssh или sudo service ssh restart
+ssh-keygen
+/.ssh/authorized_keys
+
+Docker и 
+
+sudo apt install curl software-properties-common ca-certificates apt-transport-https -y
+
+wget -O- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/docker.gpg > /dev/null
+
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable"| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+
+apt-cache policy docker-ce
+
+sudo apt install docker-ce -y
+
+sudo systemctl status docker
+
+Docker Compose
+
+sudo apt-get install docker-compose
+
+или
+
+sudo apt-get install git
+
+git --version
+
+#	mkdir /git/projects
+#	cd /git/projects
+#	git init --initial-branch=main
+
+git clone https://github.com/docker/compose.git
+
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+Git Byurrer для установки Portainer
+
+git clone https://github.com/Byurrer/de-practics.git
+
+cd /de-practics/3-porteiner
+
+docker compose up -d
+
+https://localhost:9443/
+
+порты porteiner 9443 9010 8000
+
+настройка iptables
+
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUNPUT ACCEPT
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 9443 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 9010 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
+sudo iptables -L
+
+проверка портов
+
+nc -vz ipaddress 22
+
